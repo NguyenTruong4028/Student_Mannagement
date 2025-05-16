@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include __DIR__ . '/../../config/db.php';
 include __DIR__ . '/../../function/auth.php';
 
@@ -12,14 +13,31 @@ if ($_SESSION['role'] != 'Sinh viên') {
     echo "<script>alert('Trang này chỉ dành cho sinh viên!'); window.location.href='manage-student.php';</script>";
     exit();
 }
- 
+
+if (!isset($_SESSION['ma_sinhvien'])) {
+    echo "Lỗi: ma_sinhvien không tồn tại trong session!";
+    exit();
+}
+
+// Kiểm tra kết nối database
+if (!$conn) {
+    die("Lỗi kết nối cơ sở dữ liệu: " . mysqli_connect_error());
+}
+
 // Lấy thông tin sinh viên từ database
-$ma_sinhvien = $conn->real_escape_string($_SESSION['ma_sinhvien']);
-$result = $conn->query("SELECT * FROM sinhvien WHERE ma_sinhvien = '$ma_sinhvien'");
+$ma_sinhvien = $conn->real_escape_string(trim($_SESSION['ma_sinhvien']));
+$query = "SELECT * FROM sinhvien WHERE ma_sinhvien = '$ma_sinhvien'";
+$result = $conn->query($query);
+
+if (!$result) {
+    echo "Lỗi SQL: " . $conn->error;
+    exit();
+}
+
 if ($result->num_rows > 0) {
     $student = $result->fetch_assoc();
 } else {
-    echo "<script>alert('Không tìm thấy thông tin sinh viên!'); window.location.href='login.php';</script>";
+    echo "<script>alert('Không tìm thấy thông tin sinh viên!'); window.location.href='../login.php';</script>";
     exit();
 }
 
@@ -28,7 +46,7 @@ $ma_khoa = $student['ma_khoa'];
 $khoa_result = $conn->query("SELECT ten_khoa FROM khoa WHERE ma_khoa = '$ma_khoa'");
 $khoa = $khoa_result->num_rows > 0 ? $khoa_result->fetch_assoc()['ten_khoa'] : $ma_khoa;
 
-// Xử lý cập nhật thông tin
+// Xử lý cập nhật thông tin cá nhân
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'update_profile') {
     $ho_ten = $conn->real_escape_string($_POST['ho_ten']);
     $ngay_sinh = $conn->real_escape_string($_POST['ngay_sinh']);
@@ -54,6 +72,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     } else {
         echo "<script>alert('Cập nhật thông tin thất bại! Lỗi: " . addslashes($conn->error) . "');</script>";
     }
+}
+
+// Xử lý đổi mật khẩu
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'change_password') {
+    $current_password = $conn->real_escape_string($_POST['current_password']);
+    $new_password = $conn->real_escape_string($_POST['new_password']);
+    $confirm_password = $conn->real_escape_string($_POST['confirm_password']);
+
+    // Kiểm tra mật khẩu mới và xác nhận mật khẩu
+    if ($new_password !== $confirm_password) {
+        echo json_encode(['success' => false, 'message' => 'Mật khẩu mới và xác nhận mật khẩu không khớp!']);
+        exit();
+    }
+
+    // Kiểm tra độ dài và định dạng mật khẩu mới
+    $password_regex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
+    if (!preg_match($password_regex, $new_password)) {
+        echo json_encode(['success' => false, 'message' => 'Mật khẩu mới phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt!']);
+        exit();
+    }
+
+    // Lấy mật khẩu hiện tại từ bảng taikhoan
+    $query = "SELECT password FROM taikhoan WHERE ma_sinhvien = '$ma_sinhvien'";
+    $result = $conn->query($query);
+
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        if ($current_password === $user['password']) { // So sánh plain text
+            // Cập nhật mật khẩu mới
+            $update_query = "UPDATE taikhoan SET password = '$new_password' WHERE ma_sinhvien = '$ma_sinhvien'";
+            if ($conn->query($update_query)) {
+                echo json_encode(['success' => true, 'message' => 'Cập nhật mật khẩu thành công!']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Cập nhật mật khẩu thất bại! Lỗi: ' . addslashes($conn->error)]);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Mật khẩu hiện tại không đúng!']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Không tìm thấy tài khoản!']);
+    }
+    exit();
 }
 ?>
 
@@ -238,21 +298,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
                     <div id="mat-khau">
                         <div class="card">
                             <h3 class="card-title">Đổi mật khẩu</h3>
-                            <form id="change-password-form">
+                            <form id="change-password-form" method="POST">
+                                <input type="hidden" name="action" value="change_password">
                                 <div class="form-group">
                                     <label for="current-password">Mật khẩu hiện tại</label>
-                                    <input type="password" id="current-password" class="form-control" placeholder="Nhập mật khẩu hiện tại" required>
+                                    <input type="password" id="current-password" name="current_password" class="form-control" placeholder="Nhập mật khẩu hiện tại" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="new-password">Mật khẩu mới</label>
-                                    <input type="password" id="new-password" class="form-control" placeholder="Nhập mật khẩu mới" required>
+                                    <input type="password" id="new-password" name="new_password" class="form-control" placeholder="Nhập mật khẩu mới" required>
                                     <small style="color: #6c757d; margin-top: 5px; display: block;">
                                         Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.
                                     </small>
                                 </div>
                                 <div class="form-group">
                                     <label for="confirm-password">Xác nhận mật khẩu mới</label>
-                                    <input type="password" id="confirm-password" class="form-control" placeholder="Nhập lại mật khẩu mới" required>
+                                    <input type="password" id="confirm-password" name="confirm_password" class="form-control" placeholder="Nhập lại mật khẩu mới" required>
                                 </div>
                                 <button type="submit" class="btn btn-success">Cập nhật mật khẩu</button>
                             </form>
@@ -278,23 +339,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
         
         document.getElementById('change-password-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            const currentPassword = document.getElementById('current-password').value;
-            const newPassword = document.getElementById('new-password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            
-            if (newPassword !== confirmPassword) {
-                alert('Mật khẩu mới và xác nhận mật khẩu không khớp!');
-                return;
-            }
-            
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-            if (!passwordRegex.test(newPassword)) {
-                alert('Mật khẩu mới không đạt yêu cầu bảo mật!');
-                return;
-            }
-            
-            alert('Mật khẩu đã được cập nhật thành công!');
-            this.reset();
+            const form = this;
+            const formData = new FormData(form);
+
+            fetch('profile.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) {
+                    form.reset();
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi:', error);
+                alert('Đã xảy ra lỗi khi cập nhật mật khẩu!');
+            });
         });
         
         document.getElementById('avatar-upload').addEventListener('change', function() {

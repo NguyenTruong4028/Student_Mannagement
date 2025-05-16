@@ -1,12 +1,11 @@
 <?php
 include __DIR__ . '/../../config/db.php';
 
-//Kiểm tra xem người dùng đã đăng nhập chưa
 //Kiểm tra quyền admin
-// if(!isset($_SESSION['role'])||$_SESSION['role'] != 'Quản trị viên'){
-//     header('Location: ../login.php');
-//     exit();
-// }
+if(!isset($_SESSION['role'])||$_SESSION['role'] != 'Quản trị viên'){
+    header('Location: ../login.php');
+    exit();
+}
 //Search student
 $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
 $class = isset($_GET['class']) ? $conn->real_escape_string($_GET['class']) : '';

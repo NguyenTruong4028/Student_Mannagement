@@ -19,9 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $login_result = login($conn, $username, $password);
         if (is_array($login_result) && isset($login_result['success']) && $login_result['success']) {
             if ($_SESSION['role'] == 'Quản trị viên') {
-                header("Location: ./admin/student_management.php");
+                header("Location: ../templates/admin/student_management.php");
             } else {
-                header("Location: students/profile.php");
+                header("Location: ../templates/students/profile.php");
             }
             exit();
         } else {
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label class="checkbox-label">
                         <input type="checkbox" name="remember"> Ghi nhớ đăng nhập
                     </label>
-                    <a href="forgot-password.php">Quên mật khẩu?</a>
+                    <a href="forgotpassword.php">Quên mật khẩu?</a>
                 </div>
                 
                 <div class="form-group">
@@ -83,6 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-    <script src="../asset/js/main.js"></script>
+    <script src="../../asset/js/main.js"></script>
 </body>
 </html>

@@ -1,46 +1,18 @@
-// function showPage(pageId) {
 
-//   // Reset reCAPTCHA if switching to a page that has it
-//   if (
-//     pageId === "login" ||
-//     pageId === "register" ||
-//     pageId === "forgot-password"
-//   ) {
-//     try {
-//       grecaptcha.reset();
-//     } catch (e) {
-//       // reCAPTCHA might not be loaded yet
-//     }
-//   }
-// }
+function validateForm(formId) {
+    const form = document.getElementById(formId);
+    const password = form.querySelector('input[name="password"]').value;
+    const confirmPassword = form.querySelector('input[name="confirm_password"]').value;
 
-// function validateForm(formId) {
-//   // Basic form validation
-//   const form = document.getElementById(formId);
-//   const inputs = form.querySelectorAll("input");
-//   let isValid = true;
+    if (password !== confirmPassword) {
+        alert('Mật khẩu và xác nhận mật khẩu không khớp!');
+        return false;
+    }
 
-//   inputs.forEach((input) => {
-//     if (input.required && !input.value.trim()) {
-//       input.style.borderColor = "#dc3545";
-//       isValid = false;
-//     } else {
-//       input.style.borderColor = "#e0e0e0";
-//     }
-//   });
+    if (password.length < 6) {
+        alert('Mật khẩu phải có ít nhất 6 ký tự!');
+        return false;
+    }
 
-//   // Check reCAPTCHA
-//   try {
-//     const recaptchaResponse = grecaptcha.getResponse();
-//     if (recaptchaResponse.length === 0) {
-//       document.querySelector(".g-recaptcha").style.border = "1px solid #dc3545";
-//       isValid = false;
-//     } else {
-//       document.querySelector(".g-recaptcha").style.border = "none";
-//     }
-//   } catch (e) {
-//     // reCAPTCHA might not be on this form
-//   }
-
-//   return isValid;
-// }
+    return true;
+}
