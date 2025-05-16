@@ -25,6 +25,24 @@ body {
   text-align: center;
 }
 
+.logout-link {
+  padding: 10px 15px;
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logout-link:hover {
+  background-color: #fecaca;
+  transform: translateY(-2px);
+}
+
 .container {
   background-color: white;
   padding: 30px;
@@ -72,6 +90,10 @@ body {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
+  text-align: center;
+  text-decoration: none;  
+  display: flex;
+  justify-content: center;
 }
 
 .btn:hover {
@@ -129,7 +151,7 @@ body {
 
 .navigation {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   width: 100%;
   max-width: 900px;
   margin-bottom: 20px;
@@ -335,4 +357,8 @@ body {
 
 .tab-content > div.active {
   display: block;
+}
+.btn-edit{
+  text-decoration: none;
+  justify-content: center;
 }

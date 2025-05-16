@@ -14,7 +14,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Hàm gửi email xác minh
-function sendVerificationEmail($email, $token) {
+function sendVerificationEmail($email, $token)
+{
     $mail = new PHPMailer(true);
 
     try {
@@ -50,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $conn->real_escape_string(trim($_POST['email']));
     $ma_sinhvien = $conn->real_escape_string(trim($_POST['ma_sinhvien']));
     $username = $conn->real_escape_string(trim($_POST['username']));
-    $password = $conn->real_escape_string(trim($_POST['password'])); 
+    $password = $conn->real_escape_string(trim($_POST['password']));
     $confirm_password = $conn->real_escape_string(trim($_POST['confirm_password']));
     $lop = $conn->real_escape_string(trim($_POST['lop']));
     $ma_khoa = $conn->real_escape_string(trim($_POST['ma_khoa']));
@@ -108,6 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -116,13 +118,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <link rel="stylesheet" href="../asset/css/style.css">
 </head>
+
 <body>
     <div id="register-page" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
         <h1 class="title">QUẢN LÝ SINH VIÊN</h1>
-        
+
         <div class="form-container">
             <h2 class="page-title">Đăng kí tài khoản</h2>
-            
+
             <?php
             if (isset($_SESSION['error'])) {
                 echo '<p style="color: red;">' . htmlspecialchars($_SESSION['error']) . '</p>';
@@ -141,11 +144,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" name="email" class="form-control" placeholder="example@gmail.com" required>
+                    <input type="email" name="email" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>Mã sinh viên</label>
-                    <input type="text" name="ma_sinhvien" class="form-control" placeholder="SVXXX"  required>
+                    <input type="text" name="ma_sinhvien" class="form-control" placeholder="SVXXX" required>
                 </div>
                 <div class="form-group">
                     <label>Khoa</label>
@@ -187,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="form-group">
                     <div class="g-recaptcha" data-sitekey="6LeN0zcrAAAAAOG8GYukg_ejjNdhkvAmMbb6HL_n"></div>
-                    <small style="display: block; margin-top: 5px; color: #6c757d;">Vui lòng xác nhận bạn không phải là robot</small>
+                    <small style="display: block; margin-top: 5px; color: #6c757d; text-align:center;">Vui lòng xác nhận bạn không phải là robot</small>
                 </div>
                 <button type="submit" class="btn">Đăng kí</button>
             </form>
@@ -197,4 +200,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </body>
+
 </html>

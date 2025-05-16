@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="../asset/css/style.css">
 </head>
 <body>
-    <div id="login-page" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+    <div id="manage-student-page" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
         <h1 class="title">QUẢN LÝ SINH VIÊN</h1>
         
         <div class="form-container">
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 <div class="form-group">
                     <div class="g-recaptcha" data-sitekey="6LeN0zcrAAAAAOG8GYukg_ejjNdhkvAmMbb6HL_n" data-theme="light" data-size="normal"></div>
-                    <small style="display: block; margin-top: 5px; color: #6c757d;">Vui lòng xác nhận bạn không phải là robot</small>
+                    <small style="display: block; margin-top: 5px; color: #6c757d; text-align:center;">Vui lòng xác nhận bạn không phải là robot</small>
                 </div>
                 
                 <button type="submit" class="btn">Đăng nhập</button>

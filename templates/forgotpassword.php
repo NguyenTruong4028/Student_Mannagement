@@ -38,9 +38,7 @@ include_once '../function/recaptcha.php';
                 </div>
                 <div class="form-group">
                     <div class="g-recaptcha" data-sitekey="6LeN0zcrAAAAAOG8GYukg_ejjNdhkvAmMbb6HL_n"></div>
-                    <small style="color: #6c757d; margin-top: 5px; display: block;">
-                        Vui lòng xác nhận bạn không phải là robot.
-                    </small>
+                    <small style="display: block; margin-top: 5px; color: #6c757d; text-align:center;">Vui lòng xác nhận bạn không phải là robot</small>
                 </div>
                 <button type="submit" class="btn">Gửi liên kết</button>
                 <a href="login.php" class="btn">Quay lại</a>

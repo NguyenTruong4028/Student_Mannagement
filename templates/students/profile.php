@@ -123,6 +123,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Sinh Viên - Thông Tin Cá Nhân</title>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <link rel="stylesheet" href="../../asset/css/profile.css">
 </head>
@@ -132,8 +134,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     <div class="navigation">
         <div class="user-info">
             <span>Xin chào, <?php echo htmlspecialchars($student['ho_ten']); ?></span>
-            <a href="../../logout.php" style="color: #dc3545; margin-left: 10px;">Đăng xuất</a>
-        </div>
+<a href="../../logout.php" class="logout-link">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </a>        </div>
     </div>
     
     <div class="container">
@@ -292,7 +295,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
                                     <div class="info-value"><span class="badge badge-success"><?php echo htmlspecialchars($student['trang_thai']); ?></span></div>
                                 </div>
                             </div>
-                            <a href="profile.php?edit=true" class="btn btn-success">Chỉnh sửa thông tin</a>
+                            <a href="profile.php?edit=true" class="btn btn-success btn-edit">Chỉnh sửa thông tin</a>
                         <?php endif; ?>
                     </div>
                     <div id="mat-khau">
