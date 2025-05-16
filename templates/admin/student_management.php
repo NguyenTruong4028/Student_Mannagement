@@ -1,10 +1,9 @@
 <?php
-session_start(); // Thêm dòng này để khởi tạo session
+session_start();
 include __DIR__ . '/../../config/db.php';
 
 // Kiểm tra đăng nhập và vai trò
 if (!isset($_SESSION['username']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'Quản trị viên') {
-    // Nếu chưa đăng nhập hoặc không phải admin, chuyển hướng về login.php
     header("Location: ../../login.php");
     exit();
 }
@@ -64,9 +63,6 @@ $khoas = $conn->query("SELECT ma_khoa, ten_khoa FROM khoa ORDER BY ten_khoa");
     <link rel="stylesheet" href="../../asset/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        /* Giữ nguyên CSS */
-    </style>
 </head>
 
 <body>

@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
     if ($result->num_rows > 0) {
         $student = $result->fetch_assoc();
     } else {
-        echo "<script>alert('Sinh viên không tồn tại!'); window.location.href='student_management.php';</script>";
+        echo "<script>alert('Sinh viên không tồn tại!'); window.location.href='../templates/admin/student_management.php';</script>";
         exit();
     }
 }

@@ -19,7 +19,7 @@ if (!isset($_SESSION['ma_sinhvien'])) {
     exit();
 }
 
-// Kiểm tra kết nối database
+
 if (!$conn) {
     die("Lỗi kết nối cơ sở dữ liệu: " . mysqli_connect_error());
 }
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-        if ($current_password === $user['password']) { // So sánh plain text
+        if ($current_password === $user['password']) {
             // Cập nhật mật khẩu mới
             $update_query = "UPDATE taikhoan SET password = '$new_password' WHERE ma_sinhvien = '$ma_sinhvien'";
             if ($conn->query($update_query)) {
@@ -119,6 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -128,20 +129,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <link rel="stylesheet" href="../../asset/css/profile.css">
 </head>
+
 <body>
     <h1 class="title">QUẢN LÝ SINH VIÊN</h1>
-    
+
     <div class="navigation">
         <div class="user-info">
             <span>Xin chào, <?php echo htmlspecialchars($student['ho_ten']); ?></span>
-<a href="../../logout.php" class="logout-link">
-                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                </a>        </div>
+            <a href="../../logout.php" class="logout-link">
+                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+            </a>
+        </div>
     </div>
-    
+
     <div class="container">
         <h2 class="page-title">Thông Tin Cá Nhân</h2>
-        
+
         <div class="profile-container">
             <div class="profile-sidebar">
                 <div class="profile-avatar">
@@ -152,24 +155,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
                         <img src="<?php echo htmlspecialchars($student['avatar_path']); ?>" alt="Avatar" style="max-width: 100%; border-radius: 50%;">
                     <?php endif; ?>
                 </div>
-                
+
                 <div style="text-align: center; margin-bottom: 20px;">
                     <h3 style="font-size: 18px; margin-bottom: 5px;"><?php echo htmlspecialchars($student['ho_ten']); ?></h3>
                     <p style="color: #6c757d; font-size: 14px;">Sinh viên</p>
                     <p style="color: #0275d8; font-size: 14px; font-weight: 500;"><?php echo htmlspecialchars($student['ma_sinhvien']); ?></p>
                 </div>
-                
+
                 <div class="file-upload">
                     <button class="btn" style="width: 100%; font-size: 14px;">Thay đổi ảnh đại diện</button>
                     <input type="file" id="avatar-upload" accept="image/*">
                 </div>
-                
+
                 <ul class="profile-menu" style="margin-top: 20px;">
                     <li><a href="#thong-tin" class="active" onclick="showTab('thong-tin')">Thông tin cá nhân</a></li>
                     <li><a href="#mat-khau" onclick="showTab('mat-khau')">Đổi mật khẩu</a></li>
                 </ul>
             </div>
-            
+
             <div class="profile-content">
                 <div class="tab-content">
                     <div id="thong-tin" class="active">
@@ -326,42 +329,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
             </div>
         </div>
     </div>
-    
+
     <script>
         function showTab(tabId) {
             document.querySelectorAll('.tab-content > div').forEach(tab => {
                 tab.classList.remove('active');
             });
             document.getElementById(tabId).classList.add('active');
-            
+
             document.querySelectorAll('.profile-menu a').forEach(item => {
                 item.classList.remove('active');
             });
             document.querySelector(`.profile-menu a[href="#${tabId}"]`).classList.add('active');
         }
-        
+
         document.getElementById('change-password-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const form = this;
             const formData = new FormData(form);
 
             fetch('profile.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                if (data.success) {
-                    form.reset();
-                }
-            })
-            .catch(error => {
-                console.error('Lỗi:', error);
-                alert('Đã xảy ra lỗi khi cập nhật mật khẩu!');
-            });
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.success) {
+                        form.reset();
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert('Đã xảy ra lỗi khi cập nhật mật khẩu!');
+                });
         });
-        
+
         document.getElementById('avatar-upload').addEventListener('change', function() {
             if (this.files && this.files[0]) {
                 const reader = new FileReader();
@@ -369,7 +372,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
                     const avatar = document.querySelector('.profile-avatar');
                     const placeholder = avatar.querySelector('.profile-avatar-placeholder');
                     if (placeholder) placeholder.remove();
-                    
+
                     let img = avatar.querySelector('img');
                     if (!img) {
                         img = document.createElement('img');
@@ -384,4 +387,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
         });
     </script>
 </body>
+
 </html>

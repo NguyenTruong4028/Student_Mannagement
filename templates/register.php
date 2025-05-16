@@ -22,8 +22,8 @@ function sendVerificationEmail($email, $token)
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'hongtruong.0909.04@gmail.com'; // Thay bằng email của bạn
-        $mail->Password = 'ngzdbsrsybgchfkm'; // Thay bằng mật khẩu ứng dụng
+        $mail->Username = 'hongtruong.0909.04@gmail.com'; 
+        $mail->Password = 'ngzdbsrsybgchfkm'; 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
@@ -45,7 +45,7 @@ function sendVerificationEmail($email, $token)
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    echo "Form submitted!"; // Debug
+    echo "Form submitted!"; 
 
     $ho_ten = $conn->real_escape_string(trim($_POST['ho_ten']));
     $email = $conn->real_escape_string(trim($_POST['email']));
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Insert into sinhvien with lop and ma_khoa
             $sinhvien_query = "INSERT INTO sinhvien (ma_sinhvien, ho_ten, email, lop, ma_khoa, trang_thai) VALUES ('$ma_sinhvien', '$ho_ten', '$email', '$lop', '$ma_khoa', 'Đang học')";
             if ($conn->query($sinhvien_query)) {
-                // Insert into taikhoan with plain text password
+                
                 $taikhoan_query = "INSERT INTO taikhoan (username, ma_sinhvien, password, role, is_verified, verification_token) VALUES ('$username', '$ma_sinhvien', '$password', 'Sinh viên', 0, '$verification_token')";
                 if ($conn->query($taikhoan_query)) {
                     // Send verification email

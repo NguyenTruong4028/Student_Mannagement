@@ -25,8 +25,8 @@ function sendResetPasswordEmail($email, $token) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'hongtruong.0909.04@gmail.com'; // Thay bằng email của bạn
-        $mail->Password = 'ngzdbsrsybgchfkm'; // Thay bằng mật khẩu ứng dụng
+        $mail->Username = 'hongtruong.0909.04@gmail.com'; 
+        $mail->Password = 'ngzdbsrsybgchfkm'; 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
@@ -71,13 +71,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $result->fetch_assoc();
         $ma_sinhvien = $user['ma_sinhvien'];
 
-        // Tạo token đặt lại mật khẩu
+        
         $reset_token = bin2hex(random_bytes(50));
 
-        // Lưu token vào cơ sở dữ liệu
+        
         $update_query = "UPDATE taikhoan SET reset_token = '$reset_token' WHERE ma_sinhvien = '$ma_sinhvien'";
         if ($conn->query($update_query)) {
-            // Gửi email đặt lại mật khẩu
+            
             if (sendResetPasswordEmail($email, $reset_token)) {
                 $_SESSION['success'] = 'Liên kết đặt lại mật khẩu đã được gửi đến email của bạn!';
             } else {

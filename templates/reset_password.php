@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $new_password)) {
         $_SESSION['error'] = 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt!';
     } else {
-        // Cập nhật mật khẩu mới (plain text)
+        // Cập nhật mật khẩu mới 
         $update_query = "UPDATE taikhoan SET password = '$new_password', reset_token = NULL WHERE ma_sinhvien = '$ma_sinhvien'";
         if ($conn->query($update_query)) {
             $_SESSION['success'] = 'Mật khẩu đã được đặt lại thành công! Vui lòng đăng nhập.';

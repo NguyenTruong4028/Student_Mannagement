@@ -1,6 +1,6 @@
 <?php
 function verifyRecaptcha($response) {
-    $secret = '6LeN0zcrAAAAAF_uiw1GQu0w-EqxenNFGcmeAoXo'; // Thay bằng khóa bí mật reCAPTCHA
+    $secret = '6LeN0zcrAAAAAF_uiw1GQu0w-EqxenNFGcmeAoXo'; 
     $url = 'https://www.google.com/recaptcha/api/siteverify';
     $data = [
         'secret' => $secret,
